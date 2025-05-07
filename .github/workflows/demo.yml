@@ -1,31 +1,36 @@
-name: Build Vite React App and Upload Artifact
+name: Build and Deploy Vite App to IIS
 
 on:
   push:
     branches:
-      - main # Change this if you're deploying from another branch
+      - main
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  build-and-deploy:
+    runs-on: self-hosted
 
     steps:
-      - name: Checkout Repository
+      # Step 1: Checkout code
+      - name: Checkout code
         uses: actions/checkout@v3
 
+      # Step 2: Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18 # or your preferred Node.js version
+          node-version: 18
 
+      # Step 3: Install dependencies
       - name: Install dependencies
         run: npm install
 
+      # Step 4: Build Vite app
       - name: Build Vite App
         run: npm run build
 
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: vite-build
-          path: dist/
+      # Step 5: Deploy to IIS (local folder copy)
+      - name: Deploy to IIS folder
+        run: |
+          Remove-Item -Recurse -Force "C:\inetpub\wwwroot\my-vite-app\*" -ErrorAction SilentlyContinue
+          Copy-Item -Path ".\dist\*" -Destination "C:\inetpub\wwwroot\my-vite-app\" -Recurse
+        shell: pwsh
