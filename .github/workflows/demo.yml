@@ -31,6 +31,6 @@ jobs:
       # Step 5: Deploy to IIS (local folder copy)
       - name: Deploy to IIS folder
         run: |
-          Remove-Item -Recurse -Force "C:\inetpub\wwwroot\my-vite-app\*" -ErrorAction SilentlyContinue
-          Copy-Item -Path ".\dist\*" -Destination "C:\inetpub\wwwroot\my-vite-app\" -Recurse
+          Remove-Item -Recurse -Force "C:\inetpub\wwwroot\*" -ErrorAction SilentlyContinue
+          Copy-Item -Path ".\dist\*" -Destination "C:\inetpub\wwwroot\" -Recurse
         shell: pwsh
